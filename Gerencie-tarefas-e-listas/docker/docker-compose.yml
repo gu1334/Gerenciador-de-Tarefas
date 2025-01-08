@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mydb
+    ports:
+      - "3307:3306" # Porta 3307 no host mapeada para a 3306 no contêiner
+    environment:
+      MYSQL_USER: gusta
+      MYSQL_PASSWORD: 12345
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: 12345
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  db_data:
