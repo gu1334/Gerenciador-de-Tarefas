@@ -1,7 +1,9 @@
 package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user;
 
 
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.dto.LoginRequest;
 import jakarta.persistence.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.util.Set;
@@ -61,5 +63,10 @@ public class Users {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+
+    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+       return  passwordEncoder.matches(loginRequest.password(), this.password);
     }
 }
