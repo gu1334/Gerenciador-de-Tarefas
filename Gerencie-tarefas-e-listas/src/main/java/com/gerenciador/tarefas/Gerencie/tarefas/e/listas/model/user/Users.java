@@ -1,7 +1,7 @@
 package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user;
 
 
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.dto.LoginRequest;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.LoginRequest;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,7 +1,8 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login;
 
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.dto.LoginRequest;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.dto.LoginResponse;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.LoginRequest;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.LoginResponse;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 @RestController
 public class TokenCOntroller {
@@ -40,12 +42,17 @@ public class TokenCOntroller {
 
               var now = Instant.now();
               var experesIn = 300L;
+              var scopes = user.get().getRoles()
+                      .stream()
+                      .map(Role::getName)
+                      .collect(Collectors.joining(" "));
 
               var claims = JwtClaimsSet.builder()
                       .issuer("myBackend")
                       .subject(user.get().getUserId().toString())
                       .issuedAt(now)
                       .expiresAt(now.plusSeconds(experesIn))
+                      .claim("scope", scopes)
                       .build();
 
               var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
