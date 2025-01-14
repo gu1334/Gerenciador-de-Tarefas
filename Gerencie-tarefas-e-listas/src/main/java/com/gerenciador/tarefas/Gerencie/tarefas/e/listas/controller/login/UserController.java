@@ -34,7 +34,7 @@ public class UserController {
 
     @Transactional
     @PostMapping("/users")
-    public ResponseEntity<Void> newUser(@RequestBody CreateUserDTO dto){
+    public ResponseEntity<String> newUser(@RequestBody CreateUserDTO dto){
 
        var basicRole = roleRepository.findByName(Role.Values.BASIC.name());
        var userFromDb = userRepository.findByUsername(dto.username());
@@ -49,7 +49,7 @@ public class UserController {
       user.setRoles(Set.of(basicRole));
       userRepository.save(user);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Usuario: "+ user.getUsername() + " criado com Sucesso");
 
     }
 
