@@ -1,5 +1,6 @@
 package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login;
 
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.user.UsuarioJaCadastradoException;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.CreateUserDTO;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Users;
@@ -34,31 +35,35 @@ public class UserController {
 
     @Transactional
     @PostMapping("/users")
-    public ResponseEntity<String> newUser(@RequestBody CreateUserDTO dto){
+    public ResponseEntity<String> newUser(@RequestBody CreateUserDTO dto) {
 
-       var basicRole = roleRepository.findByName(Role.Values.BASIC.name());
-       var userFromDb = userRepository.findByUsername(dto.username());
+        var basicRole = roleRepository.findByName(Role.Values.BASIC.name());
+        var userFromDb = userRepository.findByUsername(dto.username());
 
-      if(userFromDb.isPresent()){
-          throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
-      }
+        if (userFromDb.isPresent()) {
+            throw new UsuarioJaCadastradoException(dto.username());
+        }
 
-      var user = new Users();
-      user.setUsername(dto.username());
-      user.setPassword(passwordEncoder.encode(dto.password()));
-      user.setRoles(Set.of(basicRole));
-      userRepository.save(user);
+        var user = new Users();
+        user.setUsername(dto.username());
+        user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setRoles(Set.of(basicRole));
+        userRepository.save(user);
 
-        return ResponseEntity.ok("Usuario: "+ user.getUsername() + " criado com Sucesso");
-
+        return ResponseEntity.ok("Usuário: " + user.getUsername() + " criado com sucesso");
     }
 
 
     @GetMapping("/users")
     @PreAuthorize("hasAnyAuthority('SCOPE_admin')")
     public ResponseEntity<List<Users>> listUsers(){
-        var users = userRepository.findAll();
-        return ResponseEntity.ok(users);
+       try{
+           var users = userRepository.findAll();
+           return ResponseEntity.ok(users);
+       }catch (Exception e){
+           throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
+       }
+
     }
 
 }

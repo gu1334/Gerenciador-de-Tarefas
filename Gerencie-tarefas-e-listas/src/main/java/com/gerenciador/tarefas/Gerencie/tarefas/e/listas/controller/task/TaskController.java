@@ -1,6 +1,8 @@
 package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.TechnicalException;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.user.UserNotFoundException;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.CreateTaskDTO;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.Status;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
@@ -35,19 +37,30 @@ public class TaskController {
     @JsonView(Views.PublicWithCreateAt.class)
     public ResponseEntity<Task> createTask(@RequestBody CreateTaskDTO dto, JwtAuthenticationToken token) {
         try {
-            var user = userRepository.findById(UUID.fromString(token.getName()));
+            // Busca o usuário pelo ID do token, verificando se existe
+            var user = userRepository.findById(UUID.fromString(token.getName()))
+                    .orElseThrow(() -> new UserNotFoundException());
+
+            // Criação da tarefa
             var task = new Task();
-            task.setUser(user.get());
+            task.setUser(user);
             task.setTitle(dto.title());
             task.setDescription(dto.description());
             task.setStatus(dto.status());
             task.setPriority(dto.priority());
+
+            // Salva a tarefa no repositório
             taskRepository.save(task);
+
+            // Retorna a resposta com a tarefa criada
             return ResponseEntity.ok(task);
-        }catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException();
+        } catch (Exception e) {
+            throw new TechnicalException("003", "Failed to create task: " + e.getMessage());
         }
     }
+
 
     @GetMapping
     @JsonView(Views.Public.class)
@@ -70,7 +83,7 @@ public class TaskController {
             return ResponseEntity.ok(tasks);
 
         }catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new TechnicalException("003", "Failed to find task: " + e.getMessage());
         }
     }
 
@@ -78,7 +91,6 @@ public class TaskController {
     @GetMapping("/search")
     @JsonView(Views.Public.class)
     public ResponseEntity<List<Task>> getTasksByStatus(@RequestParam(required = false) String status, JwtAuthenticationToken token) {
-
      try {
          var user = userRepository.findById(UUID.fromString(token.getName()))
                  .orElseThrow(() -> new RuntimeException("User not found"));
@@ -98,8 +110,8 @@ public class TaskController {
              tasks = taskRepository.findByStatusAndUser(currentStatus, user);
          }
          return ResponseEntity.ok(tasks);
-     }catch (Exception e){
-         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+     }catch (Exception e) {
+         throw new TechnicalException("003", "Failed to find task: " + e.getMessage());
      }
     }
 
@@ -124,8 +136,8 @@ public class TaskController {
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }catch (Exception e) {
+            throw new TechnicalException("006", "Failed to change task: " + e.getMessage());
         }
 
 
@@ -134,6 +146,8 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTask(@PathVariable("id") Long taskId, JwtAuthenticationToken token) {
+
+
         var user = userRepository.findById(UUID.fromString(token.getName()));
         var task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
