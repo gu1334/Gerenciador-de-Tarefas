@@ -1,9 +1,13 @@
 package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.Priority;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.Status;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view.Views;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -14,32 +18,54 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "tarefa_id")
-    private Long taskId;
+    private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private Users user;
 
+    @JsonView(Views.Public.class)
     private String title;
+
+    @JsonView(Views.Public.class)
     private String description;
 
     @Enumerated(EnumType.STRING)  //
     @Column(name = "status", nullable = false)
+    @JsonView(Views.Public.class)
     private Status status;
 
     @Enumerated(EnumType.STRING)  //
     @Column(name = "priority", nullable = false)
+    @JsonView(Views.Public.class)
     private Priority priority;
 
     @CreationTimestamp
+    @Column(updatable = false)
+    @JsonView(Views.PublicWithCreateAt.class)
     private Instant createDateTimeStamp;
 
-    public Long getTaskId() {
-        return taskId;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    @JsonView(Views.PublicWithUpdateAt.class)
+    private Instant updateAtDateTimeStamp;
+
+    public Instant getUpdateAtDateTimeStamp() {
+        return updateAtDateTimeStamp;
     }
 
-    public void setTaskId(Long tarefasId) {
-        this.taskId = tarefasId;
+    public void setUpdateAtDateTimeStamp(Instant updateAtDateTimeStamp) {
+        this.updateAtDateTimeStamp = updateAtDateTimeStamp;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long tarefasId) {
+        this.id = tarefasId;
     }
 
     public Users getUser() { // Alterado para o nome correto
