@@ -145,9 +145,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable("id") Long taskId, JwtAuthenticationToken token) {
-
-
+    public ResponseEntity deleteTask(@PathVariable("id") Long taskId, JwtAuthenticationToken token) {
         var user = userRepository.findById(UUID.fromString(token.getName()));
         var task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -155,11 +153,13 @@ public class TaskController {
         var isAdmin = user.get().getRoles()
                 .stream().anyMatch(role -> role.getName().equalsIgnoreCase(Role.Values.ADMIN.name()));
 
-        if (isAdmin || task.getUser().getUserId().equals(UUID.fromString(token.getName()))) {
-            taskRepository.deleteById(taskId);
-            return ResponseEntity.ok("Task: " + taskId + " successfully deleted");
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        try{
+            if (isAdmin || task.getUser().getUserId().equals(UUID.fromString(token.getName()))) {
+                taskRepository.deleteById(taskId);
+            }
+        } catch (Exception e) {
+            throw new TechnicalException("006", "Failed to delete task: " + e.getMessage());
         }
+        return ResponseEntity.ok("Task: " + taskId + " successfully deleted");
     }
 }
