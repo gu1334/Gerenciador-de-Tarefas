@@ -1,6 +1,5 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions;
 
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.user.UsuarioJaCadastradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

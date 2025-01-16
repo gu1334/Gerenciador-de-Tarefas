@@ -1,10 +1,10 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.user;
 
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.TechnicalException;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.LoginRequest;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.LoginResponse;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.LoginRequest;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.LoginResponse;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions.TechnicalException;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository.UserRepository;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.user.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

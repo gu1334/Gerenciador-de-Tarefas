@@ -1,4 +1,4 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions;
 
 public class BusinessException extends ErrorResponse {
     public BusinessException(String code, String message) {

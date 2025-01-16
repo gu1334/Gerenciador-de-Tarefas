@@ -1,4 +1,4 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.user;
 
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

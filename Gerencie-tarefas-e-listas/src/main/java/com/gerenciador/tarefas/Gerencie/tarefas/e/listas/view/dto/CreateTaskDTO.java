@@ -1,5 +1,7 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view.dto;
 
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.task.Priority;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.task.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

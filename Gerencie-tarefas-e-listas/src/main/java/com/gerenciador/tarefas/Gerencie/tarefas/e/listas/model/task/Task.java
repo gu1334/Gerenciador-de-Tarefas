@@ -1,10 +1,9 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.Priority;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.Status;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view.Views;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view.dto.Views;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Users;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,6 +17,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "tarefa_id")
+    @JsonView(Views.Public.class)
     private Long id;
 
 
@@ -59,6 +59,12 @@ public class Task {
     public void setUpdateAtDateTimeStamp(Instant updateAtDateTimeStamp) {
         this.updateAtDateTimeStamp = updateAtDateTimeStamp;
     }
+
+
+
+
+
+
 
     public Long getId() {
         return id;

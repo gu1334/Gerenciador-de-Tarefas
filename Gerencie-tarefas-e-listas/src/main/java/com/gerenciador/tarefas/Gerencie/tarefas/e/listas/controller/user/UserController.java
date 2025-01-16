@@ -1,11 +1,11 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.user;
 
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.user.UsuarioJaCadastradoException;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.login.dto.CreateUserDTO;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view.dto.CreateUserDTO;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions.UsuarioJaCadastradoException;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Users;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository.RoleRepository;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository.UserRepository;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.user.RoleRepository;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.user.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,8 +1,8 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.task;
 
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.controller.task.dto.Status;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Task;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.task.Task;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Users;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.task.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

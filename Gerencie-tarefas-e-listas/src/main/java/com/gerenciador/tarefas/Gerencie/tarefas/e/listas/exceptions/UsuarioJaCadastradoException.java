@@ -1,6 +1,4 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.user;
-
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception.TechnicalException;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions;
 
 public class UsuarioJaCadastradoException extends TechnicalException {
     public UsuarioJaCadastradoException(String username) {

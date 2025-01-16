@@ -1,4 +1,4 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions;
 
 public class TechnicalException extends ErrorResponse {
     public TechnicalException(String code, String message) {

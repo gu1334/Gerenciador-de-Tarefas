@@ -2,8 +2,8 @@ package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config;
 
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Role;
 import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.Users;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository.RoleRepository;
-import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.model.user.repository.UserRepository;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.user.RoleRepository;
+import com.gerenciador.tarefas.Gerencie.tarefas.e.listas.repository.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

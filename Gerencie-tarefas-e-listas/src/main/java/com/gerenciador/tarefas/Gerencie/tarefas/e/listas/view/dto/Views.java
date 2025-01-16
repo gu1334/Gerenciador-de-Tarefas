@@ -1,4 +1,4 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.view.dto;
 
 public class Views {
     public static class User {}

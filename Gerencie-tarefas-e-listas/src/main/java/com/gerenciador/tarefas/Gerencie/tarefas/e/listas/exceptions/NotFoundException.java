@@ -1,4 +1,4 @@
-package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.config.exception;
+package com.gerenciador.tarefas.Gerencie.tarefas.e.listas.exceptions;
 
 public class NotFoundException extends ErrorResponse {
     public NotFoundException(String code, String message) {
