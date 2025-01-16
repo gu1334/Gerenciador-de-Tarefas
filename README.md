@@ -1,4 +1,3 @@
-
 # Gerenciador de Tarefas
 
 ## Resumo do Projeto
