@@ -1,4 +1,3 @@
-
 # Gerenciador de Tarefas
 
 ## Resumo do Projeto
@@ -7,7 +6,7 @@ O **Gerenciador de Tarefas** é uma aplicação backend desenvolvida em **Java**
 
 - **Gestão de Tarefas:** Criação, atualização, visualização e exclusão de tarefas.
 - **Controle de Status e Prioridade:** Organize tarefas por status e prioridade.
-- **Autenticação e Autorização:** Protegido por **JWT** (JSON Web Token), com diferentes permissões de usuários (Admin e Usuário Básico).
+- **Autenticação e Autorização:** Protegido por **Spring Security** com **JWT**, incluindo diferentes permissões de usuários (Admin e Usuário Básico).
 - **Persistência de Dados:** Utiliza **MySQL** como banco de dados relacional.
 - **Arquitetura RESTful** com endpoints acessíveis via HTTP.
 - **Contêineres Docker** para facilitar a execução e deployment.
@@ -74,19 +73,15 @@ O **Gerenciador de Tarefas** é uma aplicação backend desenvolvida em **Java**
          - mysql-data:/var/lib/mysql
 
      app:
-       image: openjdk:17-jdk-slim
+       build:
+         context: .
        container_name: gerenciador-tarefas-app
-       build: .
        environment:
          SPRING_PROFILES_ACTIVE: docker
        ports:
          - "8080:8080"
        depends_on:
          - mysql
-       volumes:
-         - .:/app
-       working_dir: /app
-       command: ["./mvnw", "spring-boot:run"]
 
    volumes:
      mysql-data:
@@ -121,18 +116,24 @@ A aplicação estará disponível em `http://localhost:8080`.
 ---
 
 ## Endpoints da API
+Você está certo, faltaram essas operações no resumo da API. Vou adicionar as requisições **`getTasksByStatus`**, **`updateTask`** e **`deleteTask`** à documentação. Veja como fica agora:
+
+---
+
+## Endpoints da API
 
 A API do Gerenciador de Tarefas oferece os seguintes endpoints:
 
+---
+
 ### 1. **Criar Usuário**
-   **POST** `/users/create`  
+   **POST** `/users`  
    Cria um novo usuário no sistema.
 
-### 2. **Login e Obter Token JWT**
-   **POST** `/auth/login`  
-   Realiza login e retorna um **JWT** para autenticação.
+   **Headers**:  
+   - Content-Type: application/json  
 
-   **Exemplo de request:**
+   **Exemplo de Request:**
    ```json
    {
        "username": "usuario1",
@@ -140,71 +141,191 @@ A API do Gerenciador de Tarefas oferece os seguintes endpoints:
    }
    ```
 
-   **Exemplo de resposta:**
+   **Exemplo de Response:**
+   ```json
+   {
+       "message": "Usuário: usuario1 criado com sucesso"
+   }
+   ```
+
+---
+
+### 2. **Login e Obter Token JWT**
+   **POST** `/auth/login`  
+   Realiza login e retorna um **JWT** para autenticação.
+
+   **Headers**:  
+   - Content-Type: application/json  
+
+   **Exemplo de Request:**
+   ```json
+   {
+       "username": "usuario1",
+       "password": "senha123"
+   }
+   ```
+
+   **Exemplo de Response:**
    ```json
    {
        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
    }
    ```
 
-   **Usar o JWT**:
+   **Usar o JWT** em requisições autenticadas:
    ```http
    Authorization: Bearer {access_token}
    ```
 
-### 3. **Criar Tarefa**
+---
+
+### 3. **Listar Usuários (Apenas para Admin)**
+   **GET** `/users`  
+   Lista todos os usuários cadastrados.
+
+   **Headers**:  
+   - Authorization: Bearer {access_token}  
+
+   **Exemplo de Response:**
+   ```json
+   [
+       {
+           "id": 1,
+           "username": "usuario1",
+           "roles": ["BASIC"]
+       },
+       {
+           "id": 2,
+           "username": "admin",
+           "roles": ["ADMIN"]
+       }
+   ]
+   ```
+
+---
+
+### 4. **Criar Tarefa**
    **POST** `/tasks`  
    Cria uma nova tarefa associada ao usuário autenticado.
 
-### 4. **Atualizar Tarefa**
-   **PUT** `/tasks/{id}`  
-   Atualiza uma tarefa existente.
+   **Headers**:  
+   - Authorization: Bearer {access_token}  
+   - Content-Type: application/json  
 
-### 5. **Excluir Tarefa**
-   **DELETE** `/tasks/{id}`  
-   Exclui uma tarefa.
+   **Exemplo de Request:**
+   ```json
+   {
+       "title": "Comprar suprimentos",
+       "description": "Ir ao supermercado para comprar suprimentos",
+       "status": "TODO",
+       "priority": "HIGH"
+   }
+   ```
 
-### 6. **Obter Tarefas**
+   **Exemplo de Response:**
+   ```json
+   {
+       "id": 1,
+       "title": "Comprar suprimentos",
+       "description": "Ir ao supermercado para comprar suprimentos",
+       "status": "TODO",
+       "priority": "HIGH",
+       "created_at": "2025-01-01T12:00:00"
+   }
+   ```
+
+---
+
+### 5. **Obter Todas as Tarefas**
    **GET** `/tasks`  
    Retorna todas as tarefas do usuário autenticado.
 
-### 7. **Obter Tarefas por Status**
-   **GET** `/tasks/status/{status}`  
-   Filtra tarefas por status.
+   **Headers**:  
+   - Authorization: Bearer {access_token}  
 
----
-
-## Swagger
-
-O **Swagger** foi integrado para facilitar o uso da API. Acesse a interface interativa:
-
-1. Inicie a aplicação.
-2. Acesse o Swagger:
+   **Exemplo de Response:**
+   ```json
+   [
+       {
+           "id": 1,
+           "title": "Comprar suprimentos",
+           "description": "Ir ao supermercado para comprar suprimentos",
+           "status": "TODO",
+           "priority": "HIGH"
+       }
+   ]
    ```
-   http://localhost:8080/swagger-ui/
+
+---
+
+### 6. **Buscar Tarefas por Status**
+   **GET** `/tasks/search`  
+   Retorna todas as tarefas do usuário autenticado que possuem o status informado.
+
+   **Parâmetro de Query:**  
+   - `status`: Status da tarefa (exemplo: `TODO`, `IN_PROGRESS`, `DONE`).
+
+   **Exemplo de Request:**  
+   `GET /tasks/search?status=TODO`
+
+   **Exemplo de Response:**  
+   ```json
+   [
+       {
+           "id": 1,
+           "title": "Comprar suprimentos",
+           "description": "Ir ao supermercado para comprar suprimentos",
+           "status": "TODO",
+           "priority": "HIGH"
+       }
+   ]
    ```
 
 ---
 
-## Autenticação e Autorização
+### 7. **Atualizar Tarefa**
+   **PUT** `/tasks/{id}`  
+   Atualiza uma tarefa existente pelo `id`.
 
-A autenticação é feita com **JWT**. O fluxo é o seguinte:
+   **Headers**:  
+   - Authorization: Bearer {access_token}  
+   - Content-Type: application/json  
 
-1. **Criar Usuário**: Endpoint `/users/create`.
-2. **Login e Token**: Endpoint `/auth/login` retorna um JWT.
-3. **Acessar Endpoints Protegidos**: Inclua o JWT no cabeçalho das requisições subsequentes.
+   **Exemplo de Request:**
+   ```json
+   {
+       "title": "Comprar alimentos",
+       "description": "Ir ao supermercado para comprar alimentos frescos",
+       "status": "IN_PROGRESS",
+       "priority": "MEDIUM"
+   }
+   ```
+
+   **Exemplo de Response:**
+   ```json
+   {
+       "id": 1,
+       "title": "Comprar alimentos",
+       "description": "Ir ao supermercado para comprar alimentos frescos",
+       "status": "IN_PROGRESS",
+       "priority": "MEDIUM",
+       "updated_at": "2025-01-01T15:00:00"
+   }
+   ```
 
 ---
 
-## Contribuindo
+### 8. **Excluir Tarefa**
+   **DELETE** `/tasks/{id}`  
+   Exclui uma tarefa existente pelo `id`.
 
-1. Faça o fork do repositório.
-2. Crie uma nova branch (`git checkout -b minha-nova-funcionalidade`).
-3. Faça suas alterações e commite-as.
-4. Envie um pull request.
+   **Headers**:  
+   - Authorization: Bearer {access_token}  
+
+   **Exemplo de Response:**  
+   ```json
+   "Tarefa excluída com sucesso!"
+   ```
 
 ---
 
-## Licença
-
-Este projeto está licenciado sob a MIT License. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
