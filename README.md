@@ -116,11 +116,6 @@ A aplicação estará disponível em `http://localhost:8080`.
 ---
 
 ## Endpoints da API
-Você está certo, faltaram essas operações no resumo da API. Vou adicionar as requisições **`getTasksByStatus`**, **`updateTask`** e **`deleteTask`** à documentação. Veja como fica agora:
-
----
-
-## Endpoints da API
 
 A API do Gerenciador de Tarefas oferece os seguintes endpoints:
 
